@@ -1,0 +1,23 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+
+    </style>
+
+    <style name="DarkBG" parent="AppTheme">
+        <item name="android:background">#444444</item>
+        <item name="android:textColor">#EEEEEE</item>
+    </style>
+
+    <style name="NormalText" parent="AppTheme">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="BoldRedText" parent="AppTheme">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#FF6655</item>
+    </style>
+
+</resources>

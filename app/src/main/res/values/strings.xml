@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ProtoShade</string>
+    <string name="action_settings">Settings</string>
+    <string name="tv_seconds">%d sec.</string>
+    <string name="action_save">Save Shader</string>
+    <string name="action_load">Load Shader</string>
+    <string name="btn_compile">Compile</string>
+    <string name="compile_error_general">The shader could not be compiled.</string>
+    <string name="loading_obj">Loading OBJ %s …</string>
+    <string name="btn_compile_error">Error</string>
+    <string name="btn_no_compile_errors">No Errors</string>
+    <string name="shader_preview">Shader Preview</string>
+    <string name="shader_title">Title</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="dialog_save_shader">Save Shader ...</string>
+    <string name="shader_saved">Shader Saved</string>
+    <string name="error_file_io_exception">Error: Could not write shader to storage.</string>
+    <string name="reset_time">Reset Time</string>
+    <string name="error_empty_filename">Error: Please use alphanumeric characters.</string>
+    <string name="compiler_log">GLSL Compiler Log</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="edit">Edit</string>
+    <string name="pause_animation">Pause Animation</string>
+    <string name="preference_category_3d_renderer">3D Renderer</string>
+    <string name="preference_desc_3d_model">The model onto which the shader is rendered</string>
+    <string name="preference_3d_model">3D Model</string>
+    <string name="preference_category_animator">Animator</string>
+    <string name="preference_auto_rotate">Rotate in Editor</string>
+    <string name="preference_description_auto_rotate">Rotate the model when in the editor</string>
+    <string name="title_preferences">ProtoShade Preferences</string>
+    <string name="new_shader">New Shader</string>
+
+    <string name="admob_banner_id">ca-app-pub-8028170723246982/1183410157</string>
+
+</resources>

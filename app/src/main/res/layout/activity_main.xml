@@ -1,0 +1,83 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/DarkBG"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MenuActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- Custom OpenGL viewport view -->
+        <com.id11688025.majorassignment.CustomGLSurfaceView
+            android:id="@+id/gl_viewport"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <View
+            android:id="@+id/view_dimmer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:visibility="gone"
+            android:alpha="0.5"/>
+
+        <EditText
+            android:id="@+id/et_code"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            android:scrollbars="vertical"
+            android:inputType="textMultiLine"/>
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:layout_weight="0">
+
+        <ImageButton
+            android:id="@+id/btn_rewind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/reset_time"
+            android:onClick="onClick_resetTime"
+            android:src="@android:drawable/ic_media_previous"/>
+
+        <ImageButton
+            android:id="@+id/btn_play_pause"
+            android:layout_toRightOf="@id/btn_rewind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_media_pause"
+            android:onClick="onClick_pauseTime"
+            android:contentDescription="@string/pause_animation" />
+
+        <ImageButton
+            android:id="@+id/btn_edit"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick_edit"
+            android:src="@android:drawable/ic_menu_edit"
+            android:contentDescription="@string/edit" />
+
+        <Button
+            android:id="@+id/btn_errors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/btn_edit"
+            android:textColor="@android:color/white"
+            android:enabled="false"
+            android:text="@string/btn_no_compile_errors"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

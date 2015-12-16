@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="model_titles">
+        <item>Stanford Bunny</item>
+        <item>Utah Teapot</item>
+        <item>Torus Knot</item>
+        <item>Geodesic Sphere</item>
+        <item>Cube</item>
+    </string-array>
+    <string-array name="model_files">
+        <item>models/dbunny.obj</item>
+        <item>models/normal_teapot.obj</item>
+        <item>models/torus_knot.obj</item>
+        <item>models/geosphere.obj</item>
+        <item>models/normal_cube.obj</item>
+    </string-array>
+</resources>
