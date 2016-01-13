@@ -144,7 +144,7 @@ public class ShaderDescriptionAdapter extends BaseAdapter
         // Set up the ad request, and exclude some devices
         AdRequest.Builder request = new AdRequest.Builder();
         request.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
-        request.addTestDevice("BD242537DB272D6912E6B988FDA2AF93");
+        request.addTestDevice("83995836C3F076F2374445E91DFFC7B9");
 
         adView.loadAd(request.build());
         return adView;
