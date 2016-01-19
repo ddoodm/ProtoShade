@@ -74,6 +74,9 @@ public class MainActivity extends Activity {
             configureRenderer();
 
         configurePreferenceListener();
+
+        // Hide title from the ActionBar
+        getActionBar().setDisplayShowTitleEnabled(false);
     }
 
     /** Initialize the OpenGL surface and renderer with a model and a sample shader */
@@ -188,6 +191,11 @@ public class MainActivity extends Activity {
     {
         switch (item.getItemId())
         {
+            case R.id.action_texture:
+                // Show the sampler selection dialog
+                new SamplerDialog(this, glSurface.getRenderer()).show();
+                break;
+
             case R.id.action_load:
                 // Show the list of saved shaders
                 Intent intent = new Intent(this, LocalShaderList.class);

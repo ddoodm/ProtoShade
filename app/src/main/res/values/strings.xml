@@ -32,7 +32,22 @@
     <string name="preference_description_auto_rotate">Rotate the model when in the editor</string>
     <string name="title_preferences">ProtoShade Preferences</string>
     <string name="new_shader">New Shader</string>
+    <string name="ok">OK</string>
 
     <string name="admob_banner_id">ca-app-pub-8028170723246982/1183410157</string>
+    <string name="texture_filtering_mode">Texture Filtering Mode</string>
+    <string name="texture_wrapping_mode">Texture Wrapping Mode</string>
+    <string name="sampler_dialog_title">Sampler Settings</string>
+
+    <string-array name="filter_modes">
+        <item>Linear</item>
+        <item>Nearest-Neighbor</item>
+    </string-array>
+
+    <string-array name="wrap_mode">
+        <item>Repeat</item>
+        <item>Mirrored Repeat</item>
+        <item>Clamp to Edge</item>
+    </string-array>
 
 </resources>

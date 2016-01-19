@@ -17,6 +17,9 @@ public class Texture2D
     /** The texture 'name' supplied by OpenGL */
     private int glTextureName;
 
+    private TextureFilteringMode textureFilteringMode = TextureFilteringMode.LINEAR;
+    private TextureWrapMode textureWrapMode = TextureWrapMode.REPEAT;
+
     /**
      * Create a Texture2D from an OpenGL texture that has already been initialized.
      * @param glTextureName The resource name supplied by OpenGL
@@ -48,8 +51,8 @@ public class Texture2D
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTextureName);
 
         // Configure filtering mode
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        setTextureFilteringMode(TextureFilteringMode.LINEAR);
+        setTextureWrapMode(TextureWrapMode.REPEAT);
 
         // Provide the texel data (mipmap 0, bitmap, 0 border)
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, textureBmp, 0);
@@ -62,5 +65,33 @@ public class Texture2D
     public int getTextureName()
     {
         return glTextureName;
+    }
+
+    public void setTextureFilteringMode(TextureFilteringMode mode)
+    {
+        this.textureFilteringMode = mode;
+
+        int glFilteringMode =
+                (textureFilteringMode == TextureFilteringMode.LINEAR)? GLES20.GL_LINEAR :
+                        (textureFilteringMode == TextureFilteringMode.NEAREST)? GLES20.GL_NEAREST :
+                                -1;
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, glFilteringMode);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, glFilteringMode);
+    }
+
+    public void setTextureWrapMode(TextureWrapMode textureWrapMode)
+    {
+        this.textureWrapMode = textureWrapMode;
+
+        int glWrapMode = -1;
+        switch (textureWrapMode)
+        {
+            case REPEAT: glWrapMode = GLES20.GL_REPEAT;   break;
+            case REPEAT_MIRROR: glWrapMode = GLES20.GL_MIRRORED_REPEAT;   break;
+            case CLAMP_EDGE: glWrapMode = GLES20.GL_CLAMP_TO_EDGE;   break;
+        }
+
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, glWrapMode);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, glWrapMode);
     }
 }

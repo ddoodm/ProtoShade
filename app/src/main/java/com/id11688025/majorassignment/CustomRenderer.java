@@ -10,6 +10,8 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.id11688025.majorassignment.graphics.Model;
+import com.id11688025.majorassignment.graphics.TextureFilteringMode;
+import com.id11688025.majorassignment.graphics.TextureWrapMode;
 import com.id11688025.majorassignment.math.*;
 import com.id11688025.majorassignment.shaders.Shader;
 
@@ -149,11 +151,13 @@ public class CustomRenderer implements GLSurfaceView.Renderer
      */
     public void pinchInput (float distance)
     {
+        //TODO: Make pinch work, or kill it
+
         // Be sure that the model is not still being parsed
         if(model == null)
             return;
 
-        model.transform(Matrix.createScale(distance));
+        //model.transform(Matrix.createScale(distance));
     }
 
     /** Supply a fragment shader to use on the object (from the user).
@@ -330,5 +334,24 @@ public class CustomRenderer implements GLSurfaceView.Renderer
 
         newScreenshot = false;
         return displayRender;
+    }
+
+    public void setTextureFilteringMode(final TextureFilteringMode mode)
+    {
+        tasks.add(new Runnable() {
+            @Override
+            public void run() {
+                model.setTextureFilteringMode(mode);
+            }
+        });
+    }
+
+    public void setTextureWrapMode(final TextureWrapMode textureWrapMode) {
+        tasks.add(new Runnable() {
+            @Override
+            public void run() {
+                model.setTextureWrapMode(textureWrapMode);
+            }
+        });
     }
 }

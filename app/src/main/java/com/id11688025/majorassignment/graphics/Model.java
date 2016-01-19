@@ -136,4 +136,13 @@ public class Model
     {
         return shader;
     }
+
+    public void setTextureFilteringMode(final TextureFilteringMode mode)
+    {
+        texture.setTextureFilteringMode(mode);
+    }
+
+    public void setTextureWrapMode(TextureWrapMode mode) {
+        texture.setTextureWrapMode(mode);
+    }
 }

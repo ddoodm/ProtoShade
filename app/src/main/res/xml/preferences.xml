@@ -2,12 +2,14 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/preference_category_3d_renderer">
+
         <ListPreference
             android:title="@string/preference_3d_model"
             android:summary="@string/preference_desc_3d_model"
             android:key="model_preference"
             android:entries="@array/model_titles"
             android:entryValues="@array/model_files"/>
+
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preference_category_animator">
         <SwitchPreference
