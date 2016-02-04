@@ -38,6 +38,8 @@
     <string name="texture_filtering_mode">Texture Filtering Mode</string>
     <string name="texture_wrapping_mode">Texture Wrapping Mode</string>
     <string name="sampler_dialog_title">Sampler Settings</string>
+    <string name="select_image_from_phone">Select Image from Phone</string>
+    <string name="sampler_image_source">Sampler Image Source</string>
 
     <string-array name="filter_modes">
         <item>Linear</item>

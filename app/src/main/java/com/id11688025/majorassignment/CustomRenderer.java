@@ -15,6 +15,7 @@ import com.id11688025.majorassignment.graphics.TextureWrapMode;
 import com.id11688025.majorassignment.math.*;
 import com.id11688025.majorassignment.shaders.Shader;
 
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
@@ -351,6 +352,16 @@ public class CustomRenderer implements GLSurfaceView.Renderer
             @Override
             public void run() {
                 model.setTextureWrapMode(textureWrapMode);
+            }
+        });
+    }
+
+    public void setTexture(final InputStream texture)
+    {
+        tasks.add(new Runnable() {
+            @Override
+            public void run() {
+                model.setTexture(texture);
             }
         });
     }

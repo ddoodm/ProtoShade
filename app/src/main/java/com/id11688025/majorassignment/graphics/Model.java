@@ -11,6 +11,8 @@ import com.id11688025.majorassignment.math.Matrix;
 import com.id11688025.majorassignment.math.VertexPositionNormalTextureTangent;
 import com.id11688025.majorassignment.objparser.OBJModel;
 
+import java.io.InputStream;
+
 /**
  * A 3D model. Not to be confused with OBJModel,
  * which is a mechanism for loading OBJ files.
@@ -32,12 +34,16 @@ public class Model
     /** The object's vertices */
     private VertexPositionNormalTextureTangent vertices[];
 
+    private ContentManager content;
+
     /** Should the model rotate by itself every update? */
     private boolean rotateAudomatically = false;
 
     /** Create a model from an OBJ model and a shader */
     public Model(final ContentManager content, final OBJModel model, final Shader shader)
     {
+        this.content = content;
+
         initialize(content, model, shader);
 
         // Provide the model's vertex buffer to the existing shader
@@ -47,6 +53,8 @@ public class Model
     /** Create a model from an OBJ model */
     public Model(final ContentManager content, final OBJModel model)
     {
+        this.content = content;
+
         // Create a shader
         Shader shader = new Shader(content);
 
@@ -144,5 +152,10 @@ public class Model
 
     public void setTextureWrapMode(TextureWrapMode mode) {
         texture.setTextureWrapMode(mode);
+    }
+
+    public void setTexture(InputStream textureDataStream)
+    {
+        texture = content.loadTexture2D(textureDataStream);
     }
 }

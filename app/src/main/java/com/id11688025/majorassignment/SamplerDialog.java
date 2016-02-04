@@ -1,16 +1,17 @@
 package com.id11688025.majorassignment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.id11688025.majorassignment.graphics.TextureFilteringMode;
 import com.id11688025.majorassignment.graphics.TextureWrapMode;
@@ -22,11 +23,15 @@ public class SamplerDialog extends AlertDialog
 {
     private View childView;
     private CustomRenderer renderer;
+    private Context context;
+    private Activity mainActivity;
 
-    protected SamplerDialog(Context context, CustomRenderer renderer)
+    protected SamplerDialog(Context context, CustomRenderer renderer, Activity activity)
     {
         super(context);
         this.renderer = renderer;
+        this.context = context;
+        this.mainActivity = activity;
 
         // Create a Layout Inflater to inflate the XML layout
         LayoutInflater inflater = getLayoutInflater();
@@ -68,6 +73,8 @@ public class SamplerDialog extends AlertDialog
                 spinnerSamplerFiltermode = (Spinner)childView.findViewById(R.id.spinner_sampler_filtermode),
                 spinnerSamplerWrapmode = (Spinner)childView.findViewById(R.id.spinner_sampler_wrapmode);
 
+        Button buttonSelectImage = (Button)childView.findViewById(R.id.btn_sampler_select_image);
+
         linkSpinnerToStringArray(spinnerSamplerFiltermode, R.array.filter_modes);
         linkSpinnerToStringArray(spinnerSamplerWrapmode, R.array.wrap_mode);
 
@@ -96,5 +103,32 @@ public class SamplerDialog extends AlertDialog
 
             }
         });
+
+        buttonSelectImage.setOnClickListener(new SelectImageClickListener(context));
+    }
+
+    private class SelectImageClickListener implements View.OnClickListener
+    {
+        private Context context;
+
+        public  SelectImageClickListener(Context context)
+        {
+            super();
+            this.context = context;
+        }
+
+        @Override
+        public void onClick(View view) {
+            Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            getIntent.setType("image/*");
+
+            Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickIntent.setType("image/*");
+
+            Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+            mainActivity.startActivityForResult(chooserIntent, Constants.REQUEST_CODE_PICK_SAMPLER_IMAGE);
+        }
     }
 }

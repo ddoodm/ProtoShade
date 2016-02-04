@@ -108,7 +108,6 @@ public class SaveDialog extends AlertDialog
         int originalWidth = original.getWidth();
         int originalHeight = original.getHeight();
 
-
         // Determine which dimension should be constrained
         Bitmap cropped;
         if(originalWidth > originalHeight)

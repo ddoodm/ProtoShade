@@ -7,6 +7,7 @@ public class Constants
 {
     public static final int REQUEST_CODE_LOAD_SHADER = 0;
     public static final int REQUEST_CODE_MODEL_CHANGED = 1;
+    public static final int REQUEST_CODE_PICK_SAMPLER_IMAGE = 2;
 
     public static final int RESULT_CODE_LOADED = 0;
     public static final int RESULT_CODE_EXIT = 1;

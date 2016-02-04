@@ -8,6 +8,8 @@ import android.opengl.GLUtils;
 
 import com.id11688025.majorassignment.ContentManager;
 
+import java.io.InputStream;
+
 /**
  * A structure that defines a two-dimensional texture,
  * and its OpenGL texture name.
@@ -35,6 +37,22 @@ public class Texture2D
      */
     public Texture2D(ContentManager content, final int resourceID)
     {
+        // Decode the bitmap from the Android resource ID provided
+        Bitmap textureBmp = BitmapFactory.decodeResource(content.getResources(), resourceID);
+
+        initialize(textureBmp);
+    }
+
+    public Texture2D(InputStream texture)
+    {
+        // Decode the bitmap from the InputStream data
+        Bitmap textureBmp = BitmapFactory.decodeStream(texture);
+
+        initialize(textureBmp);
+    }
+
+    private void initialize(Bitmap textureBmp)
+    {
         // Allocate a new texture in the OpenGL environment.
         int[] glTextureNames = new int[1];
         GLES20.glGenTextures(1, glTextureNames, 0);
@@ -43,9 +61,6 @@ public class Texture2D
         // A texture name of '0' indicates a failure
         if(glTextureName == 0)
             throw new RuntimeException("OpenGL ES could not allocate a new texture name.");
-
-        // Decode the bitmap from the Android resource ID provided
-        Bitmap textureBmp = BitmapFactory.decodeResource(content.getResources(), resourceID);
 
         // Bind the texture name to the texture-2D binding point
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTextureName);

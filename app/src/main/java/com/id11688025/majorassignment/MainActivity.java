@@ -21,12 +21,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.id11688025.majorassignment.objparser.OBJLoaderTask;
 import com.id11688025.majorassignment.objparser.OBJModel;
 import com.id11688025.majorassignment.storage.LocalShaderList;
 import com.id11688025.majorassignment.storage.SaveDialog;
 import com.id11688025.majorassignment.storage.ShaderDescription;
+
+import java.io.InputStream;
 
 public class MainActivity extends Activity {
 
@@ -193,7 +196,7 @@ public class MainActivity extends Activity {
         {
             case R.id.action_texture:
                 // Show the sampler selection dialog
-                new SamplerDialog(this, glSurface.getRenderer()).show();
+                new SamplerDialog(this, glSurface.getRenderer(), this).show();
                 break;
 
             case R.id.action_load:
@@ -237,6 +240,33 @@ public class MainActivity extends Activity {
                 if(resultCode == Constants.RESULT_CODE_CHANGED)
                     invalidateRenderer();
                 break;
+
+            case Constants.REQUEST_CODE_PICK_SAMPLER_IMAGE:
+                updateTextureImage(resultCode, data);
+                break;
+        }
+    }
+
+    private void updateTextureImage(int resultCode, Intent data)
+    {
+        if(resultCode == Activity.RESULT_OK)
+        {
+            InputStream inputStream;
+
+            if(data == null)
+            {
+                Toast.makeText(this, "The selected image could not be loaded. Sorry", Toast.LENGTH_LONG);
+                return;
+            }
+
+            try {
+                inputStream = getContentResolver().openInputStream(data.getData());
+            } catch (Exception e) {
+                Toast.makeText(this, "The selected image could not be loaded. Sorry", Toast.LENGTH_LONG);
+                return;
+            }
+
+            glSurface.getRenderer().setTexture(inputStream);
         }
     }
 

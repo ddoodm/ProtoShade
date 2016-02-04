@@ -148,4 +148,9 @@ public class ContentManager
     {
         return new Texture2D(this, resourceID);
     }
+
+    public Texture2D loadTexture2D(InputStream texture)
+    {
+        return new Texture2D(texture);
+    }
 }
