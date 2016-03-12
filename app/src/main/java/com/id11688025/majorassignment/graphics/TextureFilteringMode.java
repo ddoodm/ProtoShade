@@ -5,6 +5,6 @@ package com.id11688025.majorassignment.graphics;
  */
 public enum TextureFilteringMode
 {
-    NEAREST,
-    LINEAR
+    LINEAR,
+    NEAREST
 }

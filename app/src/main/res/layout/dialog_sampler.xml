@@ -32,6 +32,7 @@
         android:text="@string/sampler_image_source"/>
 
     <ImageView
+        android:id="@+id/iv_texturePreview"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:background="#F5F5F5"

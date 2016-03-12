@@ -58,6 +58,7 @@ public class MainActivity extends Activity {
 
         // Obtain a preferece manager
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //preferences = getPreferences(Context.MODE_PRIVATE);
 
         // Initialize the Content Manager
         contentManager = new ContentManager(this);
@@ -267,6 +268,11 @@ public class MainActivity extends Activity {
             }
 
             glSurface.getRenderer().setTexture(inputStream);
+
+            // Save image URI to preferences
+            preferences.edit()
+                    .putString(Constants.KEY_TEXTURE_IMAGE_PATH, data.getData().toString())
+                    .apply();
         }
     }
 

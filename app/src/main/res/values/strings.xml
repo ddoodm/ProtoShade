@@ -40,6 +40,8 @@
     <string name="sampler_dialog_title">Sampler Settings</string>
     <string name="select_image_from_phone">Select Image from Phone</string>
     <string name="sampler_image_source">Sampler Image Source</string>
+    <string name="select_image">Select Image</string>
+    <string name="last_used_image_not_found">The last-used image could not be found</string>
 
     <string-array name="filter_modes">
         <item>Linear</item>

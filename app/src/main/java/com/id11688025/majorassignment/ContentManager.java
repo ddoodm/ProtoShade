@@ -1,11 +1,14 @@
 package com.id11688025.majorassignment;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.preference.PreferenceManager;
 
 import com.id11688025.majorassignment.graphics.Texture2D;
 
@@ -22,6 +25,7 @@ public class ContentManager
 {
     /** The application context */
     private Context context;
+    private SharedPreferences preferences;
 
     /**
      * Create a context manager.
@@ -30,6 +34,7 @@ public class ContentManager
     public ContentManager(Context context)
     {
         this.context = context;
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     /**
@@ -146,11 +151,11 @@ public class ContentManager
 
     public Texture2D loadTexture2D(final int resourceID)
     {
-        return new Texture2D(this, resourceID);
+        return new Texture2D(preferences, this, resourceID);
     }
 
     public Texture2D loadTexture2D(InputStream texture)
     {
-        return new Texture2D(texture);
+        return new Texture2D(preferences, texture);
     }
 }

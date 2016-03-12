@@ -22,4 +22,8 @@ public class Constants
 
     public static final String FALLBACK_MODEL = "models/dbunny.obj";
     public static final String FALLBACK_SHADER = "shaders/phong_basic.fs.glsl";
+
+    public static final String KEY_SAMPLER_FILTER_MODE = "SAMPLER_FILTER_MODE";
+    public static final String KEY_SAMPLER_TEXTURE_WRAP_MODE = "SAMPLER_TEXTURE_WRAP_MODE";
+    public static final String KEY_TEXTURE_IMAGE_PATH = "TEXTURE_IMAGE_PATH";
 }

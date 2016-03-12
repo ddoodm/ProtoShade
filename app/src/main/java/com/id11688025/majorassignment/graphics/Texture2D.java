@@ -1,11 +1,14 @@
 package com.id11688025.majorassignment.graphics;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
+import com.id11688025.majorassignment.Constants;
 import com.id11688025.majorassignment.ContentManager;
 
 import java.io.InputStream;
@@ -16,6 +19,8 @@ import java.io.InputStream;
  */
 public class Texture2D
 {
+    private SharedPreferences preferences;
+
     /** The texture 'name' supplied by OpenGL */
     private int glTextureName;
 
@@ -35,16 +40,20 @@ public class Texture2D
      * @param content The content manager.
      * @param resourceID The Android resource ID of the texture bitmap.
      */
-    public Texture2D(ContentManager content, final int resourceID)
+    public Texture2D(SharedPreferences preferences, ContentManager content, final int resourceID)
     {
+        this.preferences = preferences;
+
         // Decode the bitmap from the Android resource ID provided
         Bitmap textureBmp = BitmapFactory.decodeResource(content.getResources(), resourceID);
 
         initialize(textureBmp);
     }
 
-    public Texture2D(InputStream texture)
+    public Texture2D(SharedPreferences preferences, InputStream texture)
     {
+        this.preferences = preferences;
+
         // Decode the bitmap from the InputStream data
         Bitmap textureBmp = BitmapFactory.decodeStream(texture);
 
@@ -66,8 +75,8 @@ public class Texture2D
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, glTextureName);
 
         // Configure filtering mode
-        setTextureFilteringMode(TextureFilteringMode.LINEAR);
-        setTextureWrapMode(TextureWrapMode.REPEAT);
+        setTextureFilteringMode(TextureFilteringMode.values()[preferences.getInt(Constants.KEY_SAMPLER_FILTER_MODE, 0)]);
+        setTextureWrapMode(TextureWrapMode.values()[preferences.getInt(Constants.KEY_SAMPLER_TEXTURE_WRAP_MODE, 0)]);
 
         // Provide the texel data (mipmap 0, bitmap, 0 border)
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, textureBmp, 0);
@@ -86,10 +95,13 @@ public class Texture2D
     {
         this.textureFilteringMode = mode;
 
-        int glFilteringMode =
-                (textureFilteringMode == TextureFilteringMode.LINEAR)? GLES20.GL_LINEAR :
-                        (textureFilteringMode == TextureFilteringMode.NEAREST)? GLES20.GL_NEAREST :
-                                -1;
+        int glFilteringMode = -1;
+        switch (mode)
+        {
+            case LINEAR: glFilteringMode = GLES20.GL_LINEAR; break;
+            case NEAREST: glFilteringMode = GLES20.GL_NEAREST; break;
+        }
+
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, glFilteringMode);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, glFilteringMode);
     }
