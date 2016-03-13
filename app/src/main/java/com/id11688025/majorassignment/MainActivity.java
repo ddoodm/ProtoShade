@@ -1,17 +1,11 @@
 package com.id11688025.majorassignment;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,13 +15,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.id11688025.majorassignment.objparser.OBJLoaderTask;
-import com.id11688025.majorassignment.objparser.OBJModel;
 import com.id11688025.majorassignment.storage.LocalShaderList;
 import com.id11688025.majorassignment.storage.SaveDialog;
-import com.id11688025.majorassignment.storage.ShaderDescription;
 
 import java.io.InputStream;
 
@@ -197,7 +188,7 @@ public class MainActivity extends Activity {
         {
             case R.id.action_texture:
                 // Show the sampler selection dialog
-                new SamplerDialog(this, glSurface.getRenderer(), this).show();
+                new SamplerDialog(this, glSurface.getRenderer(), this, contentManager).show();
                 break;
 
             case R.id.action_load:
@@ -243,29 +234,18 @@ public class MainActivity extends Activity {
                 break;
 
             case Constants.REQUEST_CODE_PICK_SAMPLER_IMAGE:
-                updateTextureImage(resultCode, data);
+                updateTextureImageFromIntent(resultCode, data);
                 break;
         }
     }
 
-    private void updateTextureImage(int resultCode, Intent data)
+    private void updateTextureImageFromIntent(int resultCode, Intent data)
     {
         if(resultCode == Activity.RESULT_OK)
         {
-            InputStream inputStream;
-
-            if(data == null)
-            {
-                Toast.makeText(this, "The selected image could not be loaded. Sorry", Toast.LENGTH_LONG);
+            InputStream inputStream = contentManager.getFileFromUri(data.getData());
+            if(inputStream == null)
                 return;
-            }
-
-            try {
-                inputStream = getContentResolver().openInputStream(data.getData());
-            } catch (Exception e) {
-                Toast.makeText(this, "The selected image could not be loaded. Sorry", Toast.LENGTH_LONG);
-                return;
-            }
 
             glSurface.getRenderer().setTexture(inputStream);
 

@@ -3,6 +3,7 @@ package com.id11688025.majorassignment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
@@ -362,6 +363,16 @@ public class CustomRenderer implements GLSurfaceView.Renderer
             @Override
             public void run() {
                 model.setTexture(texture);
+            }
+        });
+    }
+
+    public void setTexture(final Uri uri, final ContentManager content)
+    {
+        tasks.add(new Runnable() {
+            @Override
+            public void run() {
+                model.setTexture(content.getFileFromUri(uri));
             }
         });
     }

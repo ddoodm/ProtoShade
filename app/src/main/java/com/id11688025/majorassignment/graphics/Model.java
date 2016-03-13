@@ -1,6 +1,9 @@
 package com.id11688025.majorassignment.graphics;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.opengl.GLES20;
+import android.preference.PreferenceManager;
 
 import com.id11688025.majorassignment.Camera;
 import com.id11688025.majorassignment.ContentManager;
@@ -40,9 +43,10 @@ public class Model
     private boolean rotateAudomatically = false;
 
     /** Create a model from an OBJ model and a shader */
-    public Model(final ContentManager content, final OBJModel model, final Shader shader)
+    public Model(final ContentManager content, final OBJModel model, final Shader shader, Texture2D texture)
     {
         this.content = content;
+        this.texture = texture;
 
         initialize(content, model, shader);
 
@@ -51,9 +55,10 @@ public class Model
     }
 
     /** Create a model from an OBJ model */
-    public Model(final ContentManager content, final OBJModel model)
+    public Model(final ContentManager content, final OBJModel model, Texture2D texture)
     {
         this.content = content;
+        this.texture = texture;
 
         // Create a shader
         Shader shader = new Shader(content);
@@ -73,7 +78,8 @@ public class Model
         // Provide the vertex buffer with the object's vertices
         vertexBuffer = new VertexBufferObject<VertexPositionNormalTextureTangent>(vertices);
 
-        texture = content.loadTexture2D(R.drawable.concrete);
+        // TODO: Make texture image loading better
+        //texture = content.loadTexture2D(R.drawable.concrete);
 
         // Use the shader
         this.shader = shader;

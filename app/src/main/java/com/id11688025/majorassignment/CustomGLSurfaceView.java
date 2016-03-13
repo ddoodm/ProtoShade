@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 import com.id11688025.majorassignment.graphics.Model;
+import com.id11688025.majorassignment.graphics.Texture2D;
 import com.id11688025.majorassignment.math.Vector2;
 import com.id11688025.majorassignment.objparser.OBJModel;
 import com.id11688025.majorassignment.shaders.Shader;
@@ -122,7 +123,10 @@ public class CustomGLSurfaceView extends GLSurfaceView
         queueEvent(new Runnable() {
             @Override
             public void run() {
-                Model model = new Model(contentManager, objModel);
+                // Get desired texture from content manager (preferences)
+                Texture2D texture = contentManager.getTextureFileFromPreference();
+
+                Model model = new Model(contentManager, objModel, texture);
                 renderer.provideUserModel(model);
             }
         });

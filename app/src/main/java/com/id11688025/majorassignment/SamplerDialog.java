@@ -33,13 +33,15 @@ public class SamplerDialog extends AlertDialog
     private CustomRenderer renderer;
     private Context context;
     private Activity mainActivity;
+    private ContentManager content;
 
-    protected SamplerDialog(Context context, CustomRenderer renderer, Activity activity)
+    protected SamplerDialog(Context context, CustomRenderer renderer, Activity activity, ContentManager content)
     {
         super(context);
         this.renderer = renderer;
         this.context = context;
         this.mainActivity = activity;
+        this.content = content;
 
         // Create a Layout Inflater to inflate the XML layout
         LayoutInflater inflater = getLayoutInflater();
@@ -80,8 +82,6 @@ public class SamplerDialog extends AlertDialog
         Spinner
                 spinnerSamplerFiltermode = (Spinner)childView.findViewById(R.id.spinner_sampler_filtermode),
                 spinnerSamplerWrapmode = (Spinner)childView.findViewById(R.id.spinner_sampler_wrapmode);
-
-        Button buttonSelectImage = (Button)childView.findViewById(R.id.btn_sampler_select_image);
 
         linkSpinnerToStringArray(spinnerSamplerFiltermode, R.array.filter_modes);
         linkSpinnerToStringArray(spinnerSamplerWrapmode, R.array.wrap_mode);
@@ -129,7 +129,33 @@ public class SamplerDialog extends AlertDialog
 
         initPreviewImage(preferences);
 
+        Button buttonSelectImage = (Button)childView.findViewById(R.id.btn_sampler_select_image);
+        Button buttonDefaultImage = (Button)childView.findViewById(R.id.btn_sampler_default_image);
+
         buttonSelectImage.setOnClickListener(new SelectImageClickListener(context));
+
+        // Default texture
+        buttonDefaultImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Path to the default image
+                String packageName = context.getPackageName();
+                Uri path = Uri.parse(
+                        "android.resource://" + packageName + "/" + R.drawable.concrete);
+
+                // Save to preferences
+                preferences.edit().putString(
+                        Constants.KEY_TEXTURE_IMAGE_PATH,
+                        path.toString()
+                ).apply();
+
+                // Apply to model
+                renderer.setTexture(path, content);
+
+                // Hide dialog
+                dismiss();
+            }
+        });
     }
 
     private void initPreviewImage(SharedPreferences preferences)

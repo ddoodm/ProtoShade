@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
@@ -31,8 +32,9 @@ public class Texture2D
      * Create a Texture2D from an OpenGL texture that has already been initialized.
      * @param glTextureName The resource name supplied by OpenGL
      */
-    public Texture2D(final int glTextureName)
+    public Texture2D(SharedPreferences preferences, final int glTextureName)
     {
+        this.preferences = preferences;
         this.glTextureName = glTextureName;
     }
 

@@ -38,10 +38,13 @@
     <string name="texture_filtering_mode">Texture Filtering Mode</string>
     <string name="texture_wrapping_mode">Texture Wrapping Mode</string>
     <string name="sampler_dialog_title">Sampler Settings</string>
-    <string name="select_image_from_phone">Select Image from Phone</string>
+    <string name="select_image_from_phone">Browse</string>
+    <string name="default_texture_image">Default</string>
     <string name="sampler_image_source">Sampler Image Source</string>
     <string name="select_image">Select Image</string>
     <string name="last_used_image_not_found">The last-used image could not be found</string>
+    <string name="pref_texture_could_not_be_loaded">The preferred texture could not be loaded</string>
+    <string name="texture_preview">Texture Preview</string>
 
     <string-array name="filter_modes">
         <item>Linear</item>

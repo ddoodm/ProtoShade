@@ -1,14 +1,11 @@
 package com.id11688025.majorassignment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.opengl.GLES20;
-import android.opengl.GLUtils;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import com.id11688025.majorassignment.graphics.Texture2D;
 
@@ -42,7 +39,7 @@ public class ContentManager
      * @param path The resource path to the file to be read.
      * @return The input stream for the file.
      */
-    public InputStream getInputStream(String path)
+    public InputStream getResourceStreamFromPath(String path)
     {
         try
         {
@@ -55,6 +52,26 @@ public class ContentManager
         }
     }
 
+    public InputStream getFileFromUri(Uri uri)
+    {
+        InputStream inputStream;
+
+        if(uri.toString().equals(""))
+        {
+            Toast.makeText(context, context.getString(R.string.pref_texture_could_not_be_loaded), Toast.LENGTH_LONG).show();
+            return null;
+        }
+
+        try {
+            inputStream = context.getContentResolver().openInputStream(uri);
+        } catch (Exception e) {
+            Toast.makeText(context, context.getString(R.string.pref_texture_could_not_be_loaded), Toast.LENGTH_LONG).show();
+            return null;
+        }
+
+        return inputStream;
+    }
+
     /**
      * Get the input stream reader for a resource.
      * @param path The resource path to the file to be read.
@@ -62,7 +79,7 @@ public class ContentManager
      */
     public InputStreamReader getInputStreamReader(String path)
     {
-        return new InputStreamReader(getInputStream(path));
+        return new InputStreamReader(getResourceStreamFromPath(path));
     }
 
     /**
@@ -157,5 +174,30 @@ public class ContentManager
     public Texture2D loadTexture2D(InputStream texture)
     {
         return new Texture2D(preferences, texture);
+    }
+
+    public Texture2D loadTexture2D(Uri uri)
+    {
+        return new Texture2D(preferences, getFileFromUri(uri));
+    }
+
+    /**
+     * Gets the user's texture file from preferences
+     * @return The desired texture as a Texture2D
+     */
+    public Texture2D getTextureFileFromPreference()
+    {
+        InputStream texStream;
+        try {
+            Uri textureUri = Uri.parse(preferences.getString(Constants.KEY_TEXTURE_IMAGE_PATH, ""));
+            texStream = context.getContentResolver().openInputStream(textureUri);
+        } catch (Exception e) {
+            Toast.makeText(context, context.getString(R.string.pref_texture_could_not_be_loaded), Toast.LENGTH_LONG).show();
+
+            // Return default concrete texture
+            return new Texture2D(preferences, R.drawable.concrete);
+        }
+
+        return new Texture2D(preferences, texStream);
     }
 }
