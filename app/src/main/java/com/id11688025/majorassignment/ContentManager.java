@@ -20,6 +20,8 @@ import java.io.InputStreamReader;
  */
 public class ContentManager
 {
+    public final int DEFAULT_TEXTURE_RESOURCE = R.drawable.concrete;
+
     /** The application context */
     private Context context;
     private SharedPreferences preferences;
@@ -187,6 +189,10 @@ public class ContentManager
      */
     public Texture2D getTextureFileFromPreference()
     {
+        // If no preference, use default:
+        if(!preferences.contains(Constants.KEY_TEXTURE_IMAGE_PATH))
+            return loadTexture2D(DEFAULT_TEXTURE_RESOURCE);
+
         InputStream texStream;
         try {
             Uri textureUri = Uri.parse(preferences.getString(Constants.KEY_TEXTURE_IMAGE_PATH, ""));
@@ -195,7 +201,7 @@ public class ContentManager
             Toast.makeText(context, context.getString(R.string.pref_texture_could_not_be_loaded), Toast.LENGTH_LONG).show();
 
             // Return default concrete texture
-            return new Texture2D(preferences, R.drawable.concrete);
+            return loadTexture2D(DEFAULT_TEXTURE_RESOURCE);
         }
 
         return new Texture2D(preferences, texStream);

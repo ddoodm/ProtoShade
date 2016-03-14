@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -16,13 +18,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.net.Uri;
-import android.widget.Toast;
 
+import com.id11688025.majorassignment.graphics.Texture2D;
 import com.id11688025.majorassignment.graphics.TextureFilteringMode;
 import com.id11688025.majorassignment.graphics.TextureWrapMode;
-
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 /**
  * Created by Ddoodm on 14/01/2016.
@@ -160,20 +159,28 @@ public class SamplerDialog extends AlertDialog
 
     private void initPreviewImage(SharedPreferences preferences)
     {
-        // Set preview image
+        // Get image view
         ImageView imagePreview = (ImageView)childView.findViewById(R.id.iv_texturePreview);
 
-        String imageUriStr = preferences.getString(Constants.KEY_TEXTURE_IMAGE_PATH, "");
-        Uri imageUri = Uri.parse(imageUriStr);
+        // Get current Texture2D
+        Texture2D texture = renderer.getModel().getTexture();
 
-        try
-        {
-            imagePreview.setImageURI(imageUri);
-        }
-        catch (Exception e)
-        {
-            Toast.makeText(context, context.getString(R.string.last_used_image_not_found), Toast.LENGTH_LONG).show();
-        }
+        // Get preview image size from Dimensions XML resource
+        int imageSize = (int)content.getResources().getDimension(R.dimen.sampler_dialog_image_size);
+
+        // Create a scaled preview
+        Bitmap texBmpScaled = Bitmap.createScaledBitmap(
+                texture.getTextureBitmap(),
+                imageSize, imageSize,
+                true
+        );
+
+        // Recycle old preview
+        if(imagePreview.getDrawable() != null)
+            ((BitmapDrawable)imagePreview.getDrawable()).getBitmap().recycle();
+
+        // Set image preview
+        imagePreview.setImageBitmap(texBmpScaled);
     }
 
     private class SelectImageClickListener implements View.OnClickListener

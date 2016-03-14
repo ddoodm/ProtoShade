@@ -14,6 +14,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import com.id11688025.majorassignment.Constants;
 import com.id11688025.majorassignment.R;
 
 /**
@@ -144,7 +145,7 @@ public class ShaderDescriptionAdapter extends BaseAdapter
         // Set up the ad request, and exclude some devices
         AdRequest.Builder request = new AdRequest.Builder();
         request.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
-        request.addTestDevice("83995836C3F076F2374445E91DFFC7B9");
+        request.addTestDevice(Constants.TEST_ANDROID_DEVICE_ID);
 
         adView.loadAd(request.build());
         return adView;

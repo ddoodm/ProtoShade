@@ -35,6 +35,9 @@
     <string name="ok">OK</string>
 
     <string name="admob_banner_id">ca-app-pub-8028170723246982/1183410157</string>
+    <string name="main_activity_banner_id">ca-app-pub-8028170723246982/1997398952</string>
+
+
     <string name="texture_filtering_mode">Texture Filtering Mode</string>
     <string name="texture_wrapping_mode">Texture Wrapping Mode</string>
     <string name="sampler_dialog_title">Sampler Settings</string>

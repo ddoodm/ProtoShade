@@ -13,6 +13,8 @@ public class Constants
     public static final int RESULT_CODE_EXIT = 1;
     public static final int RESULT_CODE_CHANGED = 2;
 
+    public static final String TEST_ANDROID_DEVICE_ID = "83995836C3F076F2374445E91DFFC7B9";
+
     public static final String EXTRA_SHADER_SOURCE = "shader_source";
 
     public static final String EXTRA_COMPILER_LOG = "compile_log";

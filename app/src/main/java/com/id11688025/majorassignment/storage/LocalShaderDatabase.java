@@ -61,6 +61,7 @@ public class LocalShaderDatabase extends SQLiteOpenHelper
             new ShaderDescription("Normals", true, "shaders/normals.fs.glsl" ),
             new ShaderDescription("Moving Light", true, "shaders/moving_light.fs.glsl" ),
             new ShaderDescription("Electric Sinusoid", true, "shaders/sinusoid.fs.glsl" ),
+            new ShaderDescription("Tiled Texture", true, "shaders/tile_tex.fs.glsl" ),
         };
     }
 

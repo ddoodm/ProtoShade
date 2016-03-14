@@ -164,4 +164,8 @@ public class Model
     {
         texture = content.loadTexture2D(textureDataStream);
     }
+
+    public Texture2D getTexture() {
+        return texture;
+    }
 }

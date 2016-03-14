@@ -18,6 +18,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/main_activity_adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            android:layout_gravity="bottom|center_horizontal"
+            ads:adUnitId="@string/main_activity_banner_id">
+        </com.google.android.gms.ads.AdView>
+
         <View
             android:id="@+id/view_dimmer"
             android:layout_width="match_parent"

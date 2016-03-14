@@ -22,6 +22,8 @@ public class Texture2D
 {
     private SharedPreferences preferences;
 
+    private Bitmap textureBmp;
+
     /** The texture 'name' supplied by OpenGL */
     private int glTextureName;
 
@@ -32,11 +34,13 @@ public class Texture2D
      * Create a Texture2D from an OpenGL texture that has already been initialized.
      * @param glTextureName The resource name supplied by OpenGL
      */
+    /*
     public Texture2D(SharedPreferences preferences, final int glTextureName)
     {
         this.preferences = preferences;
         this.glTextureName = glTextureName;
     }
+    */
 
     /** Create a Texture2D from an Android resource.
      * @param content The content manager.
@@ -47,7 +51,7 @@ public class Texture2D
         this.preferences = preferences;
 
         // Decode the bitmap from the Android resource ID provided
-        Bitmap textureBmp = BitmapFactory.decodeResource(content.getResources(), resourceID);
+        textureBmp = BitmapFactory.decodeResource(content.getResources(), resourceID);
 
         initialize(textureBmp);
     }
@@ -57,7 +61,7 @@ public class Texture2D
         this.preferences = preferences;
 
         // Decode the bitmap from the InputStream data
-        Bitmap textureBmp = BitmapFactory.decodeStream(texture);
+        textureBmp = BitmapFactory.decodeStream(texture);
 
         initialize(textureBmp);
     }
@@ -84,13 +88,24 @@ public class Texture2D
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, textureBmp, 0);
 
         // Free the bitmap memory; OpenGL has it now
-        textureBmp.recycle();
+        // NOTE: We don't recycle anymore! We keep it!
+        //textureBmp.recycle();
     }
 
     /** @return The OpenGL texture name for this texture */
     public int getTextureName()
     {
         return glTextureName;
+    }
+
+    public Bitmap getTextureBitmap()
+    {
+        return textureBmp;
+    }
+
+    public Bitmap getTextureBitmapCopy()
+    {
+        return Bitmap.createBitmap(textureBmp);
     }
 
     public void setTextureFilteringMode(TextureFilteringMode mode)

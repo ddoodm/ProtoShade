@@ -376,4 +376,8 @@ public class CustomRenderer implements GLSurfaceView.Renderer
             }
         });
     }
+
+    public Model getModel() {
+        return model;
+    }
 }

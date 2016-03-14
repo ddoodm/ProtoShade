@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -16,6 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.id11688025.majorassignment.objparser.OBJLoaderTask;
 import com.id11688025.majorassignment.storage.LocalShaderList;
 import com.id11688025.majorassignment.storage.SaveDialog;
@@ -70,8 +73,10 @@ public class MainActivity extends Activity {
 
         configurePreferenceListener();
 
+        initAds();
+
         // Hide title from the ActionBar
-        getActionBar().setDisplayShowTitleEnabled(false);
+        try { getActionBar().setDisplayShowTitleEnabled(false); } catch (NullPointerException e) {}
     }
 
     /** Initialize the OpenGL surface and renderer with a model and a sample shader */
@@ -142,12 +147,16 @@ public class MainActivity extends Activity {
 
         // Focus listener:
         final View dimmerView = findViewById(R.id.view_dimmer);
+        final View mainAdView = findViewById(R.id.main_activity_adView);
         codeEditor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 // Make the dimmer visible when the code editor is focused
-                int visibility = hasFocus ? View.VISIBLE : View.GONE;
+                int
+                        visibility = hasFocus ? View.VISIBLE : View.GONE,
+                        invVisibility = hasFocus ? View.GONE : View.VISIBLE;
                 dimmerView.setVisibility(visibility);
+                mainAdView.setVisibility(invVisibility);
 
                 // Rotate the model automatically when the code editor is selected
                 boolean rotatePreference = preferences.getBoolean(Constants.PREFERENCE_AUTO_ROTATE, true);
@@ -314,5 +323,17 @@ public class MainActivity extends Activity {
     public void invalidateRenderer()
     {
         glSurface = null;
+    }
+
+    private void initAds()
+    {
+        AdView adView = (AdView) findViewById(R.id.main_activity_adView);
+
+        // Set up the ad request, and exclude some devices
+        AdRequest.Builder request = new AdRequest.Builder();
+        request.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+        request.addTestDevice(Constants.TEST_ANDROID_DEVICE_ID);
+
+        adView.loadAd(request.build());
     }
 }
