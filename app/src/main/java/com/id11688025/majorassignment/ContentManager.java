@@ -3,13 +3,19 @@ package com.id11688025.majorassignment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.id11688025.majorassignment.graphics.Texture2D;
+import com.id11688025.majorassignment.shaders.Shader;
+import com.id11688025.majorassignment.storage.ShaderDescription;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,6 +40,101 @@ public class ContentManager
     {
         this.context = context;
         this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    /** Prepare the file path, and write the shader to storage. */
+    public static void saveShader(Context context, ShaderDescription description, String shaderSource)
+    {
+        try {
+            // Create a File Output Stream to save the shader source code
+            FileOutputStream outStream = context.openFileOutput(description.getPath(), Context.MODE_PRIVATE);
+
+            // Write the shader data
+            outStream.write(shaderSource.getBytes());
+
+            // Close the stream
+            outStream.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            Toast.makeText(context, context.getString(R.string.error_file_io_exception), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /** Write a shader's render (bitmap) to storage. */
+    public static void saveRender(Context context, ShaderDescription description, Bitmap render)
+    {
+        // Use the same directory as the shader source code
+        String renderPath = description.getPath() + "_render";
+
+        try
+        {
+            // Create a File Output Stream to save the render
+            FileOutputStream outStream = context.openFileOutput(renderPath, Context.MODE_PRIVATE);
+
+            // Write the bitmap as a PNG
+            render.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+
+            // Close the stream
+            outStream.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public static String loadShader(Context context, String path)
+    {
+        // Buffer
+        String source = "";
+
+        try
+        {
+            // Open file file in a read-only context
+            FileInputStream inStream = context.openFileInput(path);
+
+            byte[] buffer = new byte[1028];
+
+            // Append each read to the source buffer
+            int length = 0;
+            while((length = inStream.read(buffer)) >= 0)
+                source += new String(buffer, 0, length);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        // Create a shader from the source
+        //shader = new Shader(new ContentManager(context), source);
+
+        // Store the source code
+        return source;
+    }
+
+    public static String loadShaderAsset(Context context, String path)
+    {
+        // TODO: Fix this dumb way to supply context
+        ContentManager content = new ContentManager(context);
+        return content.fileAsString(path);
+    }
+
+    public static Bitmap loadRender(Context context, String path)
+    {
+        return BitmapFactory.decodeFile(context.getFilesDir() + "/" + path + "_render");
+    }
+
+    public static Bitmap loadRenderAsset(Context context, String path)
+    {
+        try {
+            InputStream asset = context.getAssets().open(path + "_render");
+            return BitmapFactory.decodeStream(asset);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

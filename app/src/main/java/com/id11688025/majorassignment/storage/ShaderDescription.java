@@ -85,51 +85,8 @@ public class ShaderDescription
         if(ContentManager.invalidFilename(path))
             return;
 
-        saveShader(context);
-        saveRender(context);
-    }
-
-    /** Prepare the file path, and write the shader to storage. */
-    private void saveShader(Context context)
-    {
-        try {
-            // Create a File Output Stream to save the shader source code
-            FileOutputStream outStream = context.openFileOutput(path, Context.MODE_PRIVATE);
-
-            // Write the shader data
-            outStream.write(shaderSource.getBytes());
-
-            // Close the stream
-            outStream.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            Toast.makeText(context, context.getString(R.string.error_file_io_exception), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    /** Write the render (bitmap) to storage. */
-    private void saveRender(Context context)
-    {
-        // Use the same directory as the shader source code
-        String renderPath = path + "_render";
-
-        try
-        {
-            // Create a File Output Stream to save the render
-            FileOutputStream outStream = context.openFileOutput(renderPath, Context.MODE_PRIVATE);
-
-            // Write the bitmap as a PNG
-            render.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-
-            // Close the stream
-            outStream.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        ContentManager.saveShader(context, this, shaderSource);
+        ContentManager.saveRender(context, this, render);
     }
 
     /** Read the shader data and its render from storage */
@@ -137,63 +94,13 @@ public class ShaderDescription
     {
         if(isRequired)
         {
-            ContentManager content = new ContentManager(context);
-            loadShaderAsset(content);
-            loadRenderAsset(context);
+            shaderSource = ContentManager.loadShaderAsset(context, path);
+            render = ContentManager.loadRenderAsset(context, path);
         }
         else
         {
-            loadShader(context);
-            loadRender(context);
-        }
-    }
-
-    private void loadShader(Context context)
-    {
-        // Buffer
-        String source = "";
-
-        try
-        {
-            // Open file file in a read-only context
-            FileInputStream inStream = context.openFileInput(path);
-
-            byte[] buffer = new byte[1028];
-
-            // Append each read to the source buffer
-            int length = 0;
-            while((length = inStream.read(buffer)) >= 0)
-                source += new String(buffer, 0, length);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        // Create a shader from the source
-        //shader = new Shader(new ContentManager(context), source);
-
-        // Store the source code
-        this.shaderSource = source;
-    }
-
-    private void loadShaderAsset(ContentManager content)
-    {
-        this.shaderSource = content.fileAsString(path);
-    }
-
-    private void loadRender(Context context)
-    {
-        render = BitmapFactory.decodeFile(context.getFilesDir() + "/" + path + "_render");
-    }
-
-    private void loadRenderAsset(Context context)
-    {
-        try {
-            InputStream asset = context.getAssets().open(path + "_render");
-            render = BitmapFactory.decodeStream(asset);
-        } catch (IOException e) {
-            e.printStackTrace();
+            shaderSource = ContentManager.loadShader(context, path);
+            render = ContentManager.loadRender(context, path);
         }
     }
 

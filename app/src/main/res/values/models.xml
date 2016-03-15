@@ -6,6 +6,7 @@
         <item>Torus Knot</item>
         <item>Geodesic Sphere</item>
         <item>Cube</item>
+        <item>Soft Cube</item>
     </string-array>
     <string-array name="model_files">
         <item>models/dbunny.obj</item>
@@ -13,5 +14,6 @@
         <item>models/torus_knot.obj</item>
         <item>models/geosphere.obj</item>
         <item>models/normal_cube.obj</item>
+        <item>models/softcube.obj</item>
     </string-array>
 </resources>
