@@ -154,9 +154,9 @@ public class MainActivity extends Activity {
                 // Make the dimmer visible when the code editor is focused
                 int
                         visibility = hasFocus ? View.VISIBLE : View.GONE,
-                        invVisibility = hasFocus ? View.GONE : View.VISIBLE;
+                        adVisibility = hasFocus ? View.GONE : View.VISIBLE;
                 dimmerView.setVisibility(visibility);
-                mainAdView.setVisibility(invVisibility);
+                mainAdView.setVisibility(adVisibility);
 
                 // Rotate the model automatically when the code editor is selected
                 boolean rotatePreference = preferences.getBoolean(Constants.PREFERENCE_AUTO_ROTATE, true);

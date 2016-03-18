@@ -159,7 +159,7 @@ public class LocalShaderDatabase extends SQLiteOpenHelper
      * @param id The ID of the ShaderDescription to return.
      * @return The ShaderDescription with the specified ID.
      */
-    public ShaderDescription load(int id)
+    public ShaderDescription load(long id)
     {
         // Very important: SQL begins indexing at 1, not 0.
         id++;
@@ -176,7 +176,7 @@ public class LocalShaderDatabase extends SQLiteOpenHelper
                         ShaderDescription.KEY_PATH,},
                 "_id=?",            // Where clause
                 new String[]{       // Where args
-                        Integer.toString(id)},
+                        Long.toString(id)},
                 null,               // Group By
                 null,               // Having
                 null);              // Order By
@@ -191,5 +191,44 @@ public class LocalShaderDatabase extends SQLiteOpenHelper
 
         // Return the values as a ShaderDescription
         return new ShaderDescription(values);
+    }
+
+    public void remove(long id)
+    {
+        // DANGER: Must increment ID
+        id++;
+
+        // Obtain a writable database instance
+        SQLiteDatabase database = getWritableDatabase();
+
+        // Delete from the database
+        database.delete(
+                TABLE_SHADERS,
+                "_id=?",
+                new String[]{ Long.toString(id) }
+        );
+
+        database.close();
+    }
+
+    /**
+     * Obtains the ID of the element at the index of "position"
+     */
+    public long getIdOfItemAtPosition(int position)
+    {
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor c = db.rawQuery(
+                "SELECT _id FROM " + TABLE_SHADERS + " LIMIT 1 OFFSET ?;",
+                new String[]{Integer.toString(position)});
+
+        c.moveToFirst();
+        long id =  c.getLong(0);
+
+        db.close();
+        c.close();
+
+        // SUBTRACT ONE - keep IDs 0 indexed
+        return id - 1;
     }
 }

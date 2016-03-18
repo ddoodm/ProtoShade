@@ -1,5 +1,6 @@
 package com.id11688025.majorassignment.storage;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -48,6 +49,9 @@ public class ShaderDescription
     /** An image of a render that was drawn with this shader */
     private Bitmap render;
 
+    /** Flag that determines whether the source file(s) are missing */
+    private boolean fileMissing;
+
     /**
      * Creates a new ShaderDescription from discrete values.
      */
@@ -79,6 +83,13 @@ public class ShaderDescription
     /** Write the shader data and its render to storage */
     public void saveShaderAndRender(Context context)
     {
+        // Check that the external storage is writeable
+        if(!ContentManager.isExternalStorageWritable())
+        {
+            ContentManager.showStorageErrorMessage(context);
+            return;
+        }
+
         setPath(ContentManager.filenameFromTitle(title));
 
         // Do not write the file if the filename is invalid
@@ -90,8 +101,15 @@ public class ShaderDescription
     }
 
     /** Read the shader data and its render from storage */
-    public void loadShaderAndRender(Context context)
+    public void loadShaderAndRender(Context context) throws IOException
     {
+        if(!ContentManager.isExternalStorageReadable())
+        {
+            ContentManager.showStorageErrorMessage(context);
+            return;
+            //throw new IOException("The external storage could not be read");
+        }
+
         if(isRequired)
         {
             shaderSource = ContentManager.loadShaderAsset(context, path);
@@ -165,5 +183,14 @@ public class ShaderDescription
     /** @param render An image of a render that was drawn with this shader */
     public void setRender(Bitmap render) {
         this.render = render;
+    }
+
+    public void setFileMissing(boolean fileMissing) {
+        this.fileMissing = fileMissing;
+    }
+
+    public boolean isFileMissing()
+    {
+        return fileMissing;
     }
 }

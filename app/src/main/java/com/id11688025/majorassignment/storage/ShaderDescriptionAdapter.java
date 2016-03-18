@@ -17,6 +17,8 @@ import com.google.android.gms.ads.AdView;
 import com.id11688025.majorassignment.Constants;
 import com.id11688025.majorassignment.R;
 
+import java.io.IOException;
+
 /**
  * A list adapter which can provide Shader Description entries
  * to a List View.
@@ -31,6 +33,7 @@ public class ShaderDescriptionAdapter extends BaseAdapter
 
     /** The stride of ads within the list */
     //private final int adStride = 8;
+    private final int NUM_ADS = 1;
 
     /**
      * Create the Shader List adapter.
@@ -44,26 +47,35 @@ public class ShaderDescriptionAdapter extends BaseAdapter
 
     @Override
     public int getCount() {
-        return database.count() + 1;
+        return database.count() + NUM_ADS;
     }
 
     @Override
     public Object getItem(int position)
     {
-        if(position >= database.count())
-            return null;
+        long id = getItemId(position);
 
-        ShaderDescription description = database.load(position);
+        //if(id > database.count() - NUM_ADS)
+        //    return null;
+
+        ShaderDescription description = database.load(id);
 
         // Load data from the filesystem
-        description.loadShaderAndRender(context);
+        try { description.loadShaderAndRender(context); }
+        catch (IOException e)
+        {
+            // TODO: Make a better database handler for deleted files
+            description.setFileMissing(true);
+            return description;
+        }
 
         return description;
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
+    public long getItemId(int position)
+    {
+        return database.getIdOfItemAtPosition(position);
     }
 
     @Override
@@ -113,6 +125,8 @@ public class ShaderDescriptionAdapter extends BaseAdapter
         TextView tvTitle = (TextView)itemView.findViewById(R.id.tv_title);
         TextView tvPath = (TextView)itemView.findViewById(R.id.tv_path);
 
+        // TODO: Work out what's happening with ID VS position, because we crash at ID 4 with null reference
+
         // Set text of each list item View.
         tvTitle.setText(shader.getTitle());
         tvPath.setText(shader.getPath());
@@ -120,7 +134,24 @@ public class ShaderDescriptionAdapter extends BaseAdapter
         // Set the preview icon
         ivPreview.setImageBitmap(shader.getRender());
 
+        // Handle items with errors
+        handleErrorsForItem(shader, itemView);
+
         return itemView;
+    }
+
+    private void handleErrorsForItem(ShaderDescription shader, View itemView)
+    {
+        TextView errorTxt = (TextView)itemView.findViewById(R.id.tv_error);
+
+        if(shader.isFileMissing())
+        {
+            errorTxt.setText(context.getString(R.string.source_file_missing));
+            errorTxt.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        errorTxt.setVisibility(View.INVISIBLE);
     }
 
     private View makeAd(int index, View currentView, ViewGroup parent)

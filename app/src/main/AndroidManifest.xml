@@ -3,7 +3,6 @@
     package="com.id11688025.majorassignment" >
 
     <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- Include required permissions for Google Mobile Ads to run-->

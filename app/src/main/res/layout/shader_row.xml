@@ -28,4 +28,13 @@
         android:layout_toRightOf="@id/iv_preview"
         android:layout_below="@id/tv_title"/>
 
+    <TextView
+        android:id="@+id/tv_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iv_preview"
+        android:layout_below="@id/tv_path"
+        android:textColor="@android:color/holo_red_dark"
+        android:textStyle="bold"/>
+
 </RelativeLayout>

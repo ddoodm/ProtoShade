@@ -15,7 +15,7 @@
     <string name="shader_title">Title</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
-    <string name="dialog_save_shader">Save Shader ...</string>
+    <string name="dialog_save_shader">Save Shader …</string>
     <string name="shader_saved">Shader Saved</string>
     <string name="error_file_io_exception">Error: Could not write shader to storage.</string>
     <string name="reset_time">Reset Time</string>
@@ -48,6 +48,13 @@
     <string name="last_used_image_not_found">The last-used image could not be found</string>
     <string name="pref_texture_could_not_be_loaded">The preferred texture could not be loaded</string>
     <string name="texture_preview">Texture Preview</string>
+    <string name="storageUnavailable">Storage is Unavailable</string>
+    <string name="storageUnavailable_message">It seems that your device\'s public storage is unavailable.\n\nOn some devices, the external storage becomes unavailable when connected to a computer.\n\nPlease try again; sorry!</string>
+    <string name="source_file_missing">Source file missing</string>
+    <string name="error_format_shader_source_not_found" formatted="false" >The source file for this shader (%s) could not be found in the ProtoShade data directory:\n%s\n\nYou may choose to remove this entry.</string>
+    <string name="delete_entry">Delete Entry</string>
+    <string name="help">Help</string>
+    <string name="shader_list_help_message">Your shaders and their associated preview renders are stored in your phone\'s public storage at this path:\n\n%s</string>
 
     <string-array name="filter_modes">
         <item>Linear</item>

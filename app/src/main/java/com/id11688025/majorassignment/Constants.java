@@ -28,4 +28,6 @@ public class Constants
     public static final String KEY_SAMPLER_FILTER_MODE = "SAMPLER_FILTER_MODE";
     public static final String KEY_SAMPLER_TEXTURE_WRAP_MODE = "SAMPLER_TEXTURE_WRAP_MODE";
     public static final String KEY_TEXTURE_IMAGE_PATH = "TEXTURE_IMAGE_PATH";
+    public static final String SHADER_STORE_DIRECTORY_NAME = "ProtoShade";
+    public static final String SHADER_RENDER_IMAGE_FILE_SUFFIX = "_render.png";
 }

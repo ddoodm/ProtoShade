@@ -1,12 +1,16 @@
 package com.id11688025.majorassignment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.id11688025.majorassignment.graphics.Texture2D;
@@ -14,6 +18,7 @@ import com.id11688025.majorassignment.shaders.Shader;
 import com.id11688025.majorassignment.storage.ShaderDescription;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,9 +50,13 @@ public class ContentManager
     /** Prepare the file path, and write the shader to storage. */
     public static void saveShader(Context context, ShaderDescription description, String shaderSource)
     {
+        File shaderDirectory = getShaderStoreDirectory();
+        String shaderAbsPath = shaderDirectory + "/" + description.getPath();
+
         try {
             // Create a File Output Stream to save the shader source code
-            FileOutputStream outStream = context.openFileOutput(description.getPath(), Context.MODE_PRIVATE);
+            //FileOutputStream outStream = context.openFileOutput(description.getPath(), Context.MODE_PRIVATE);
+            FileOutputStream outStream = new FileOutputStream(shaderAbsPath);
 
             // Write the shader data
             outStream.write(shaderSource.getBytes());
@@ -66,12 +75,14 @@ public class ContentManager
     public static void saveRender(Context context, ShaderDescription description, Bitmap render)
     {
         // Use the same directory as the shader source code
-        String renderPath = description.getPath() + "_render";
+        File shaderDirectory = getShaderStoreDirectory();
+        String renderPath = shaderDirectory + "/" + description.getPath() + Constants.SHADER_RENDER_IMAGE_FILE_SUFFIX;
 
         try
         {
             // Create a File Output Stream to save the render
-            FileOutputStream outStream = context.openFileOutput(renderPath, Context.MODE_PRIVATE);
+            //FileOutputStream outStream = context.openFileOutput(renderPath, Context.MODE_PRIVATE);
+            FileOutputStream outStream = new FileOutputStream(renderPath);
 
             // Write the bitmap as a PNG
             render.compress(Bitmap.CompressFormat.PNG, 100, outStream);
@@ -85,27 +96,23 @@ public class ContentManager
         }
     }
 
-    public static String loadShader(Context context, String path)
+    public static String loadShader(Context context, String path) throws IOException
     {
         // Buffer
         String source = "";
 
-        try
-        {
-            // Open file file in a read-only context
-            FileInputStream inStream = context.openFileInput(path);
+        File shaderDirectory = getShaderStoreDirectory();
+        String absPath =  shaderDirectory + "/" + path;
 
-            byte[] buffer = new byte[1028];
+        // Open file file in a read-only context
+        FileInputStream inStream = new FileInputStream(absPath);
 
-            // Append each read to the source buffer
-            int length = 0;
-            while((length = inStream.read(buffer)) >= 0)
-                source += new String(buffer, 0, length);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        byte[] buffer = new byte[2048];
+
+        // Append each read to the source buffer
+        int length;
+        while((length = inStream.read(buffer)) >= 0)
+            source += new String(buffer, 0, length);
 
         // Create a shader from the source
         //shader = new Shader(new ContentManager(context), source);
@@ -123,13 +130,14 @@ public class ContentManager
 
     public static Bitmap loadRender(Context context, String path)
     {
-        return BitmapFactory.decodeFile(context.getFilesDir() + "/" + path + "_render");
+        File shaderDirectory = getShaderStoreDirectory();
+        return BitmapFactory.decodeFile(shaderDirectory + "/" + path + Constants.SHADER_RENDER_IMAGE_FILE_SUFFIX);
     }
 
     public static Bitmap loadRenderAsset(Context context, String path)
     {
         try {
-            InputStream asset = context.getAssets().open(path + "_render");
+            InputStream asset = context.getAssets().open(path + Constants.SHADER_RENDER_IMAGE_FILE_SUFFIX);
             return BitmapFactory.decodeStream(asset);
         } catch (IOException e) {
             e.printStackTrace();
@@ -251,7 +259,12 @@ public class ContentManager
         with underscores. */
 
         // Replace all but "a-z", "A-Z", "0-9" and '-' with '_'
-        return title.toLowerCase().replaceAll("[^a-zA-Z0-9\\-]", "_");
+        String filename = title.toLowerCase().replaceAll("[^a-zA-Z0-9\\-]", "_");
+
+        // Append extension
+        filename += ".fs.glsl";
+
+        return filename;
     }
 
     /**
@@ -306,5 +319,43 @@ public class ContentManager
         }
 
         return new Texture2D(preferences, texStream);
+    }
+
+    /* Checks if external storage is available for read and write */
+    public static boolean isExternalStorageWritable()
+    {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
+
+    /* Checks if external storage is available to at least read */
+    public static boolean isExternalStorageReadable()
+    {
+        String state = Environment.getExternalStorageState();
+        return (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state));
+    }
+
+    public static void showStorageErrorMessage(Context context)
+    {
+        new AlertDialog.Builder(context)
+                .setTitle(context.getString(R.string.storageUnavailable))
+                .setMessage(context.getString(R.string.storageUnavailable_message))
+                .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    public static File getShaderStoreDirectory()
+    {
+        // Get the directory for the user's public shaders directory.
+        File file = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOCUMENTS), Constants.SHADER_STORE_DIRECTORY_NAME);
+        file.mkdirs();
+        return file;
     }
 }

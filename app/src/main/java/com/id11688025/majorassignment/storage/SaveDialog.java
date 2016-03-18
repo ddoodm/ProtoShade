@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -46,21 +47,20 @@ public class SaveDialog extends AlertDialog
         setView(inflater.inflate(R.layout.dialog_save, null));
 
         // Set the dialog title
-        setTitle(context.getString(R.string.dialog_save_shader));
+        //setTitle(context.getString(R.string.dialog_save_shader));
 
         // Configure the "Save" button
         setButton(BUTTON_POSITIVE, context.getString(R.string.save), new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Build a Shader Description from the data in the dialog
-                ShaderDescription description = makeShaderDescription(shader);
-
                 // Do not save if the filename is invalid
-                if(ContentManager.invalidFilename(description.getPath()))
-                {
+                if (ContentManager.invalidFilename(((EditText) findViewById(R.id.save_title)).getText().toString())) {
                     Toast.makeText(context, R.string.error_empty_filename, Toast.LENGTH_LONG).show();
                     return;
                 }
+
+                // Build a Shader Description from the data in the dialog
+                ShaderDescription description = makeShaderDescription(shader);
 
                 // Initialize the database
                 database = new LocalShaderDatabase(context);
@@ -76,8 +76,7 @@ public class SaveDialog extends AlertDialog
         // Configure the "Cancel" button
         setButton(BUTTON_NEGATIVE, context.getString(R.string.cancel), new OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which) {
                 dismiss();
             }
         });
@@ -139,12 +138,11 @@ public class SaveDialog extends AlertDialog
         return resampled;
     }
 
-    @Override protected void onCreate(Bundle bundle)
-    {
+    @Override protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
 
         // Set the preview ImageView image source
-        ImageView ivPreview = (ImageView)findViewById(R.id.save_preview);
+        ImageView ivPreview = (ImageView) findViewById(R.id.save_preview);
         ivPreview.setImageBitmap(render);
     }
 }
