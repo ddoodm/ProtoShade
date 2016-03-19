@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,9 +46,6 @@ public class SaveDialog extends AlertDialog
 
         // Set the layout as the inflated XML layout
         setView(inflater.inflate(R.layout.dialog_save, null));
-
-        // Set the dialog title
-        //setTitle(context.getString(R.string.dialog_save_shader));
 
         // Configure the "Save" button
         setButton(BUTTON_POSITIVE, context.getString(R.string.save), new OnClickListener() {
@@ -144,5 +142,9 @@ public class SaveDialog extends AlertDialog
         // Set the preview ImageView image source
         ImageView ivPreview = (ImageView) findViewById(R.id.save_preview);
         ivPreview.setImageBitmap(render);
+
+        // Show the keyboard
+        if(findViewById(R.id.save_title).requestFocus())
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 }

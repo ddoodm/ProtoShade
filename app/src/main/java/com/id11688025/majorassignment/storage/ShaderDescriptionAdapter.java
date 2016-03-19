@@ -64,7 +64,6 @@ public class ShaderDescriptionAdapter extends BaseAdapter
         try { description.loadShaderAndRender(context); }
         catch (IOException e)
         {
-            // TODO: Make a better database handler for deleted files
             description.setFileMissing(true);
             return description;
         }
@@ -124,8 +123,6 @@ public class ShaderDescriptionAdapter extends BaseAdapter
         ImageView ivPreview = (ImageView)itemView.findViewById(R.id.iv_preview);
         TextView tvTitle = (TextView)itemView.findViewById(R.id.tv_title);
         TextView tvPath = (TextView)itemView.findViewById(R.id.tv_path);
-
-        // TODO: Work out what's happening with ID VS position, because we crash at ID 4 with null reference
 
         // Set text of each list item View.
         tvTitle.setText(shader.getTitle());

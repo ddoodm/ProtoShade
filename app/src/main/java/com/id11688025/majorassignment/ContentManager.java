@@ -128,6 +128,20 @@ public class ContentManager
         return content.fileAsString(path);
     }
 
+    public static void deleteShader(Context context, ShaderDescription description) throws IOException
+    {
+        File shaderDirectory = getShaderStoreDirectory();
+        String shaderPath = shaderDirectory + "/" + description.getPath();
+        String renderPath = shaderPath + Constants.SHADER_RENDER_IMAGE_FILE_SUFFIX;
+
+        File
+                shaderFile = new File(shaderPath),
+                renderFile = new File(renderPath);
+
+        shaderFile.delete();
+        renderFile.delete();
+    }
+
     public static Bitmap loadRender(Context context, String path)
     {
         File shaderDirectory = getShaderStoreDirectory();

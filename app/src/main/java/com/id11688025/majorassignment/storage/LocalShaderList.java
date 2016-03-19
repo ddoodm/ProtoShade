@@ -10,12 +10,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.id11688025.majorassignment.Constants;
 import com.id11688025.majorassignment.ContentManager;
 import com.id11688025.majorassignment.MainActivity;
 import com.id11688025.majorassignment.R;
+
+import java.io.IOException;
 
 /**
  * The List Activity that displays locally stored shaders.
@@ -37,6 +41,10 @@ public class LocalShaderList extends ListActivity
 
         // Provide the List Adapter with an adapter
         setListAdapter(shaderAdapter);
+
+        // Configure long-press
+        getListView().setLongClickable(true);
+        getListView().setOnItemLongClickListener(new ShaderListOnItemLongClickListener());
     }
 
     @Override protected void onListItemClick(ListView l, View v, int position, long id)
@@ -82,7 +90,7 @@ public class LocalShaderList extends ListActivity
                 .setNeutralButton(getString(R.string.delete_entry), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        database.remove(position);
+                        database.remove(shaderAdapter.getItemId(position));
                         shaderAdapter.notifyDataSetChanged();
                     }
                 })
@@ -127,5 +135,49 @@ public class LocalShaderList extends ListActivity
                 .setMessage(message)
                 .setPositiveButton(R.string.ok, null)
                 .show();
+    }
+
+    private class ShaderListOnItemLongClickListener implements AdapterView.OnItemLongClickListener {
+        @Override public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l)
+        {
+            final long itemId = shaderAdapter.getItemId(i);
+
+            final ShaderDescription shader = (ShaderDescription)shaderAdapter.getItem(i);
+
+            // Cannot modify built-in shader
+            if(shader.isRequired())
+            {
+                // TODO: This toast doesn't work for some reason
+                Toast.makeText(LocalShaderList.this, getString(R.string.cannot_modify_built_in_shader), Toast.LENGTH_LONG);
+                return true;
+            }
+
+            new AlertDialog.Builder(LocalShaderList.this)
+                    .setTitle(getString(R.string.shader_list_delete_shader_title))
+                    .setMessage(getString(R.string.shader_list_delete_shader_message))
+                    .setNegativeButton(R.string.cancel, null)
+                    .setNeutralButton(getString(R.string.delete_keep_files), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int buttonI) {
+                            // Remove from database
+                            database.remove(itemId);
+                            shaderAdapter.notifyDataSetChanged();
+                        }
+                    })
+                    .setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int buttonI) {
+                            // Remove from database
+                            database.remove(shaderAdapter.getItemId(i));
+
+                            try { ContentManager.deleteShader(LocalShaderList.this, shader); }
+                            catch (IOException e) {}
+
+                            shaderAdapter.notifyDataSetChanged();
+                        }
+                    })
+                    .show();
+            return true;
+        }
     }
 }

@@ -55,6 +55,11 @@
     <string name="delete_entry">Delete Entry</string>
     <string name="help">Help</string>
     <string name="shader_list_help_message">Your shaders and their associated preview renders are stored in your phone\'s public storage at this path:\n\n%s</string>
+    <string name="shader_list_delete_shader_title">Delete Shader?</string>
+    <string name="shader_list_delete_shader_message">Do you wish to delete this shader?\n\nYou may choose to delete the shader and its files, or just this list item (metadata).</string>
+    <string name="delete_keep_files">Delete (Keep Files)</string>
+    <string name="delete">Delete</string>
+    <string name="cannot_modify_built_in_shader">Cannot modify a built-in shader</string>
 
     <string-array name="filter_modes">
         <item>Linear</item>
